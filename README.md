@@ -11,7 +11,7 @@ Import header and use AD7747 instance, Init and get data.
 
 ```cpp
 #include "AD7747.h"
-AD7747 cap(_AD7747_ADDRESS_read, _AD7747_ADDRESS_write);
+AD7747 cap(_AD7747_ADDR_READ_, _AD7747_ADDR_WRITE_);
 ...
 void setup() {
     ...

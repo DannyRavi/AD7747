@@ -30,11 +30,11 @@ uint16_t AD7747::read16_AD77(uint16_t address)
 {
     uint16_t data = 0;
 
-    Wire.beginTransmission(_i2caddrRead);
+    Wire.beginTransmission(_I2c_AddrRead_);
     Wire.write(address);
     Wire.endTransmission(false); // restart
 
-    Wire.requestFrom(_i2caddrRead, (uint8_t)2);
+    Wire.requestFrom(_I2c_AddrRead_, (uint8_t)2);
 
     if (Wire.available() == 2)
     {
@@ -46,15 +46,15 @@ uint16_t AD7747::read16_AD77(uint16_t address)
     return data;
 }
 
-uint8_t *AD7747::read24_AD77(uint8_t address)
+uint8_t *AD7747::READ24bit(uint8_t address)
 {
     static uint8_t read_buffer[4];
 
-    Wire.beginTransmission(_i2caddrRead);
+    Wire.beginTransmission(_I2c_AddrRead_);
     Wire.write(address);
     Wire.endTransmission(); // restart
 
-    Wire.requestFrom(_i2caddrRead, (uint8_t)4);
+    Wire.requestFrom(_I2c_AddrRead_, (uint8_t)4);
     if (Wire.available())
     {
         read_buffer[0] = Wire.read();
@@ -74,7 +74,7 @@ uint8_t *AD7747::read24_AD77(uint8_t address)
 void AD7747::write8_AD77(uint8_t _address, uint8_t _data)
 {
 
-    Wire.beginTransmission(_i2caddrWrite);
+    Wire.beginTransmission(_I2C_AddrWrite_);
     Wire.write(_address);
     Wire.write(_data);
     Wire.endTransmission(true); // restart
@@ -83,7 +83,7 @@ void AD7747::write8_AD77(uint8_t _address, uint8_t _data)
 
 void AD7747::write16_AD77(uint8_t _address, uint8_t _dataHIGH, uint8_t _dataLOW)
 {
-    Wire.beginTransmission(_i2caddrWrite);
+    Wire.beginTransmission(_I2C_AddrWrite_);
     Wire.write(_address);
     Wire.write(_dataHIGH);
     Wire.write(_dataLOW);
@@ -94,11 +94,11 @@ uint8_t AD7747::read8_AD77(uint8_t _address)
 {
     uint8_t data = 0;
 
-    Wire.beginTransmission(_i2caddrRead);
+    Wire.beginTransmission(_I2c_AddrRead_);
     Wire.write(_address);
     Wire.endTransmission(); 
 
-    Wire.requestFrom(_i2caddrRead, 1);
+    Wire.requestFrom(_I2c_AddrRead_, 1);
 
     if (Wire.available())
     {
@@ -112,11 +112,11 @@ uint8_t AD7747::read8_debug_AD77(uint8_t _address)
 {
     uint8_t data = 0;
 
-    Wire.beginTransmission(_i2caddrWrite);
+    Wire.beginTransmission(_I2C_AddrWrite_);
     Wire.write(_address);
     Wire.endTransmission(false); 
 
-    Wire.requestFrom(_i2caddrRead, (uint8_t)1);
+    Wire.requestFrom(_I2c_AddrRead_, (uint8_t)1);
 
     if (Wire.available() == 1)
     {
@@ -126,49 +126,49 @@ uint8_t AD7747::read8_debug_AD77(uint8_t _address)
     return data;
 }
 
-uint8_t AD7747::check_status(uint8_t address)
+uint8_t AD7747::check_AD77(uint8_t address)
 {
     uint8_t rec = 0;
     rec = read8_AD77(address);
     return rec;
 }
 
-uint8_t AD7747::cap_dataH(uint8_t address)
+uint8_t AD7747::capDataHigh(uint8_t address)
 {
     uint8_t rec = 0;
     rec = read8_AD77(address);
     return rec;
 }
 
-uint8_t AD7747::cap_dataM(uint8_t address)
+uint8_t AD7747::capDataMid(uint8_t address)
 {
     uint8_t rec = 0;
     rec = read8_AD77(address);
     return rec;
 }
 
-uint8_t AD7747::cap_dataL(uint8_t address)
+uint8_t AD7747::capDataLow(uint8_t address)
 {
     uint8_t rec = 0;
     rec = read8_AD77(address);
     return rec;
 }
 
-uint8_t AD7747::vt_dataH(uint8_t address)
+uint8_t AD7747::vtDataHigh(uint8_t address)
 {
     uint8_t rec = 0;
     rec = read8_AD77(address);
     return rec;
 }
 
-uint8_t AD7747::vt_dataM(uint8_t address)
+uint8_t AD7747::vtDataMid(uint8_t address)
 {
     uint8_t rec = 0;
     rec = read8_AD77(address);
     return rec;
 }
 
-uint8_t AD7747::vt_dataL(uint8_t address)
+uint8_t AD7747::vtDataLow(uint8_t address)
 {
     uint8_t rec = 0;
     rec = read8_AD77(address);
@@ -182,22 +182,22 @@ uint8_t AD7747::getSetupCap(uint8_t address)
     return rec;
 }
 
-void AD7747::setSetupCap(uint8_t address, uint8_t data)
+void AD7747::setupCapX(uint8_t address, uint8_t data)
 {
     write8_AD77(address, data);
 }
 
-void AD7747::setSetupVT(uint8_t address, uint8_t data)
+void AD7747::SetupVT(uint8_t address, uint8_t data)
 {
     write8_AD77(address, data);
 }
 
-void AD7747::setSetupEXC(uint8_t address, uint8_t data)
+void AD7747::SetupEXC(uint8_t address, uint8_t data)
 {
     write8_AD77(address, data);
 }
 
-void AD7747::setConfiguration(uint8_t address, uint8_t data)
+void AD7747::setConfig(uint8_t address, uint8_t data)
 {
     write8_AD77(address, data);
 }
@@ -245,12 +245,12 @@ void AD7747::setGainL(uint8_t address, uint8_t dataLow)
 void AD7747::loadSettings(void)
 {
 
-    setSetupCap(CAP_SETUP, CAP_SETUP_REG_VALUE);
-    setSetupVT(VT_SETUP, VT_SETUP_REG_VALUE);
-    setSetupEXC(EXC_SETUP, EXC_SETUP_REG_VALUE);
-    setConfiguration(CONFIGURATION, CONFIGURATION_REG_VALUE);
-    setCapDacA(CAP_DAC_A, CAP_DAC_A_REG_VALUE);
-    setCapDacB(CAP_DAC_B, CAP_DAC_B_REG_VALUE);
+    setupCapX(CAP_SETUP, CAP_SETUP_REG_VALUE);
+    SetupVT(VT_SETUP, VT_SETUP_REG_VALUE);
+    SetupEXC(EXC_SETUP, EXC_SETUP_REG_VALUE);
+    setConfig(CONFIGURATION, CONFIGURATION_REG_VALUE);
+    setCapDacA(CAPDAC_CH_A, CAPDAC_CH_A_REG_VALUE);
+    setCapDacB(CAPDAC_CH_B, CAPDAC_CH_B_REG_VALUE);
 
 }
 
@@ -262,11 +262,11 @@ uint32_t AD7747::getCap(uint8_t addressStart)
     uint32_t cap_medium = 0;
     uint32_t cap_high = 0;
 
-    bool _isDataReady_ = isDataReadyCap(__STATUS__);
+    bool _isDataReady_ = checkCapReady(__STATUS__);
     if (_isDataReady_)
     {
         uint8_t *ptr_data; // pointer to hold address
-        ptr_data = read24_AD77(addressStart); // address of start piont
+        ptr_data = READ24bit(addressStart); // address of start piont
         cap_high = ptr_data[1];
         cap_high = cap_high << 16;
 
@@ -287,11 +287,11 @@ uint32_t AD7747::getVT(uint8_t vt_start)
     uint32_t vt_low = 0;
     uint32_t vt_medium = 0;
     uint32_t vt_high = 0;
-    bool _isDataReady_ = isDataReadyCap(__STATUS__);
+    bool _isDataReady_ = checkCapReady(__STATUS__);
     if (_isDataReady_)
     {
         uint8_t *ptr_data; // pointer to hold address
-        ptr_data = read24_AD77(vt_start);
+        ptr_data = READ24bit(vt_start);
         vt_high = ptr_data[1];
         vt_high = vt_high << 16;
 
@@ -306,12 +306,12 @@ uint32_t AD7747::getVT(uint8_t vt_start)
     return 0;
 }
 
-bool AD7747::isDataReadyCap(uint8_t address)
+bool AD7747::checkCapReady(uint8_t address)
 {
     uint8_t read_status = 1;
     while (true)
     {
-        read_status = check_status(address) & 0x1;
+        read_status = check_AD77(address) & 0x1;
         if (read_status == 0)
         {
             return true;
@@ -320,12 +320,12 @@ bool AD7747::isDataReadyCap(uint8_t address)
     }
 }
 
-bool AD7747::isDataReadyTemp(uint8_t address)
+bool AD7747::checkTempReady(uint8_t address)
 {
     uint8_t read_status = 1;
     while (true)
     {
-        read_status = check_status(address) & 0x1;
+        read_status = check_AD77(address) & 0x1;
         if (read_status == 0)
         {
             return true;
@@ -401,7 +401,7 @@ bool AD7747::isDeviceConnected(void)
                     Serial.print("0");
                 }
 
-                if (_i2caddrWrite == (uint8_t)address)
+                if (_I2C_AddrWrite_ == (uint8_t)address)
                 {
                     Serial.println("+++ connected to AD7747 +++");
                     return true;
