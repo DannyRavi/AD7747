@@ -25,7 +25,7 @@ sampling frequency: 500 Hz
 
 */
 
-#define FILTER_TAP_NUM 103
+#define FILTER_TAP_NUM 320
 
 static double filter_taps[FILTER_TAP_NUM] = {
   0.005682152041755636,
